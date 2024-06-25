@@ -1,9 +1,12 @@
 {
-	"name": "rembg-node",
+	"name": "remove-bg-node",
 	"version": "2.0.2",
 	"description": "Rembg lets you easily remove backgrounds from images using the U2-Net AI model",
-	"repository": "https://github.com/eduardoxRib/rembg-node",
-	"author": "Maki",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/eduardoxRib/rembg-node.git"
+	},
+	"author": "eduardoxRib",
 	"license": "MIT",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
