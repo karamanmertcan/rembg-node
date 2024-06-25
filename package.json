@@ -1,5 +1,5 @@
 {
-	"name": "remove-bg-node",
+	"name": "sharp-remove-bg-ai",
 	"version": "2.0.2",
 	"description": "Rembg lets you easily remove backgrounds from images using the U2-Net AI model",
 	"repository": {
