@@ -53,12 +53,6 @@ function binaryErosion(
 
 		let current = true;
 
-		// size 3  size 4
-		// x x x   x x x x
-		// x @ x   x x x x
-		// x x x   x x @ x
-		//         x x x x
-
 		for (
 			let deltaX = -Math.floor(erodeSize / 2);
 			deltaX < Math.ceil(erodeSize / 2);
@@ -93,7 +87,7 @@ export class Rembg {
 	private readonly u2netHome =
 		process.env["U2NET_HOME"] ?? path.resolve(os.homedir(), ".u2net");
 
-	readonly modelPath = path.resolve(this.u2netHome, "u2net.onnx");
+	readonly modelPath = path.resolve("u2net.onnx");
 
 	private log(message?: any) {
 		if (this.options.logging === false) return;
@@ -105,8 +99,6 @@ export class Rembg {
 	}
 
 	private async ensureModelDownloaded() {
-		// https://github.com/danielgatis/rembg/blob/9839adca961369e18f52e655d8a475acf07e7741/rembg/session_factory.py#L23
-
 		if (await exists(this.modelPath)) {
 			this.log("U2-Net model found!");
 			this.modelDownloaded = true;
@@ -137,9 +129,6 @@ export class Rembg {
 			});
 		}
 
-		// https://github.com/danielgatis/rembg/blob/9839adca961369e18f52e655d8a475acf07e7741/rembg/session_simple.py#L15
-		// https://github.com/danielgatis/rembg/blob/9839adca961369e18f52e655d8a475acf07e7741/rembg/session_base.py#L14
-
 		const imageSize = 320;
 		const { width, height } = await sharpInput.metadata();
 
@@ -165,7 +154,6 @@ export class Rembg {
 		for (let i = 0; i < inputPixels.length; i++) {
 			const channel = i % 3;
 			const channelIndex = Math.floor(i / 3);
-			// TODO: look at this again
 			inputChannels[channel][channelIndex] =
 				(inputPixels[i] / max - mean[channel]) / std[channel];
 		}
@@ -201,42 +189,9 @@ export class Rembg {
 			.raw()
 			.toBuffer();
 
-		// width * height array of 0 to 255
 		const maskData: number[] = [];
 		for (let i = 0; i < sharpMask.length; i += 3)
 			maskData.push(sharpMask[i]);
-
-		// https://github.com/danielgatis/rembg/blob/main/rembg/bg.py#L43
-		// my implementation isn't correct but it will do for now
-
-		// const foregroundThreshold = 240;
-		// const backgroundThreshold = 10;
-		// const erosionSize = 10;
-
-		// let isFg = maskData.map(pixel => pixel > foregroundThreshold);
-		// let isBg = maskData.map(pixel => pixel < backgroundThreshold);
-
-		// isFg = binaryErosion(isFg, width, height, erosionSize, 0);
-		// isBg = binaryErosion(isBg, width, height, erosionSize, 1);
-
-		// const trimap: number[] = [];
-		// for (let i = 0; i < width * height; i++) {
-		// 	trimap[i] = isFg[i] ? 255 : isBg[i] ? 0 : 128;
-		// }
-
-		// sharp(Buffer.from(trimap), {
-		// 	raw: { channels: 1, width, height },
-		// })
-		// 	.png()
-		// 	.toFile("trimap.png");
-
-		// sharp(Buffer.from(maskData), {
-		// 	raw: { channels: 1, width, height },
-		// })
-		// 	.png()
-		// 	.toFile("mask.png");
-
-		// test these values first
 
 		const finalPixels = await sharpInput
 			.clone()
@@ -246,8 +201,6 @@ export class Rembg {
 
 		for (let i = 0; i < finalPixels.length / 4; i++) {
 			let alpha = sharpMask[i * 3];
-			// if (alpha < foregroundThreshold) alpha = 0;
-			// let alpha = trimap[i];
 			finalPixels[i * 4 + 3] = alpha;
 		}
 
