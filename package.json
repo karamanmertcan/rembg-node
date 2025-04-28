@@ -22,7 +22,7 @@
 		"onnxruntime-node": "^1.11.0"
 	},
 	"peerDependencies": {
-		"sharp": "^0.30.7"
+		"sharp": "^0.33.5"
 	},
 	"devDependencies": {
 		"@types/node": "^18.0.3",
