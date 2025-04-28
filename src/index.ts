@@ -107,9 +107,8 @@ export class Rembg {
 
 			if (!(await exists(this.u2netHome))) await fs.mkdir(this.u2netHome);
 			await gdown(
-				"1tCU5MM1LhRgGou5OpmpjBQbSrYIUoYab",
+				"1cfirGyz_rTJEX1etc3S5OMW5LT8vaLW5",
 				this.modelPath,
-				"60024c5c889badc19c04ad937298a77b",
 			);
 
 			this.log("U2-Net model downloaded!");
